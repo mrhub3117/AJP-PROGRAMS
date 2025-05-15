@@ -1,53 +1,37 @@
-11)iterator
-import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ArrayList;
 
+class MyIterator<T> implements Iterator<T> {
+    private List<T> collection;
+    private int index = 0;
 
-interface Iterator {
-    boolean hasNext();
-    Object next();
-}
-
-
-interface IterableCollection {
-    Iterator getIterator();
-}
-
-
-class NameCollection implements IterableCollection {
-    private List<String> names = new ArrayList<>();
-
-    public NameCollection() {
-        names.add("Alice");
-        names.add("Bob");
-        names.add("Charlie");
+    public MyIterator(List<T> collection) {
+        this.collection = collection;
     }
 
-    public Iterator getIterator() {
-        return new NameIterator();
+    @Override
+    public boolean hasNext() {
+        return index < collection.size();
     }
 
-    private class NameIterator implements Iterator {
-        private int index = 0;
-
-        public boolean hasNext() {
-            return index < names.size();
-        }
-
-        public Object next() {
-            if (hasNext()) {
-                return names.get(index++);
-            }
-            return null;
-        }
+    @Override
+    public T next() {
+        return collection.get(index++);
     }
 }
 
-
-public class Main {
+// Usage Example:
+public class IteratorPatternExample {
     public static void main(String[] args) {
-        NameCollection collection = new NameCollection();
-        Iterator iterator = collection.getIterator();
+        List<Integer> numbers = new ArrayList<>();
+        numbers.add(1);
+        numbers.add(2);
+        numbers.add(3);
+        numbers.add(4);
+        numbers.add(5);
+
+        MyIterator<Integer> iterator = new MyIterator<>(numbers);
 
         while (iterator.hasNext()) {
             System.out.println(iterator.next());
